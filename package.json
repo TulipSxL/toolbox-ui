@@ -1,0 +1,54 @@
+{
+  "name": "@lc3/observer-console",
+  "version": "1.1.0",
+  "description": "A console web UI for observer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config build/webpack.prod.js",
+    "dev": "webpack-dev-server --config build/webpack.dev.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lemonce3/observer-console.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lemonce3/observer-console/issues"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/runtime": "^7.1.2",
+    "babel-loader": "^8.0.4",
+    "bootstrap-vue": "^2.0.2",
+    "cross-env": "^5.2.0",
+    "css-loader": "^1.0.1",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "file-loader": "^3.0.1",
+    "html-webpack-plugin": "^3.2.0",
+    "less": "^3.8.1",
+    "less-loader": "^4.1.0",
+    "style-loader": "^0.23.1",
+    "url-loader": "^1.1.2",
+    "vue": "^2.5.17",
+    "vue-i18n": "^8.3.1",
+    "vue-loader": "^15.4.2",
+    "vue-template-compiler": "^2.5.17",
+    "vuelidate": "^0.7.4",
+    "webpack": "^4.24.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10",
+    "webpack-merge": "^4.1.4",
+    "yml-loader": "^2.1.0"
+  },
+  "homepage": "https://github.com/lemonce3/observer-console#readme",
+  "dependencies": {
+    "axios": "^0.18.1",
+    "vue-router": "^3.0.2"
+  }
+}
