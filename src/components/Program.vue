@@ -28,7 +28,7 @@
 
     <!-- edit host -->
     <div v-if="edit" class="mt-3">
-      <b-card-group deck class="w-50 m-auto">
+      <b-card-group deck class="m-auto" style="max-width: 40rem">
         <b-card no-body>
           <b-card-header class="d-flex justify-content-between align-items-center">
             {{ $t('message.card.program.header.edit') }}
@@ -68,7 +68,7 @@
 
     <!-- add program -->
     <div v-if="add" class="mt-3">
-      <b-card-group deck class="w-50 m-auto">
+      <b-card-group deck class="m-auto" style="max-width: 40rem">
         <b-card no-body>
           <b-card-header class="d-flex justify-content-between align-items-center">
             {{ $t('message.card.program.header.add')}}
