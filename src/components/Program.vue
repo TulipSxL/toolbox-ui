@@ -146,10 +146,12 @@ export default {
     cancel() {
       document.location.reload();
     },
-    editProgram() {
+    async editProgram() {
       let host = {};
       let hostList = [];
       let hostStr = [];
+
+      await axios.put("/api/program", this.program);
 
       this.selected.forEach(item => {
         hostStr = item.split("-");
@@ -163,7 +165,7 @@ export default {
         hostList.push(host);
       });
 
-      axios.put("/api/program/" + this.program.id + "/host", hostList).then(() => {
+      await axios.put("/api/program/" + this.program.id + "/host", hostList).then(() => {
         document.location.reload();
       });
     },
@@ -191,8 +193,6 @@ export default {
 
         hostList.push(host);
       });
-
-      alert(JSON.stringify(hostList));
 
       await axios
         .post("/api/program/" + this.program.name + "/host", hostList)
