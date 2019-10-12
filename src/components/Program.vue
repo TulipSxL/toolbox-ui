@@ -7,7 +7,7 @@
           <b-card-header class="d-flex justify-content-between align-items-center">
             {{ item.program.name }}
             <div>
-              <b-badge variant="success" href="#/program" @click="addProgramReady()" pill>+</b-badge>
+              <b-badge variant="primary" href="#/program" @click="addProgramReady()" pill>+</b-badge>
               <b-badge variant="info" href="#/program" @click="editProgramReady(item)" pill>≡</b-badge>
               <b-badge variant="danger" href="#/program" @click="deleteProgram(item.program)" pill>x</b-badge>
             </div>
@@ -26,7 +26,7 @@
       </b-card-group>
     </div>
 
-    <!-- edit host -->
+    <!-- edit program -->
     <div v-if="edit" class="mt-3">
       <b-card-group deck class="m-auto" style="max-width: 40rem">
         <b-card no-body>
@@ -50,16 +50,17 @@
                 id="edit-program-name-feedback"
               >{{ $t('message.program.name.feedback') }}</b-form-invalid-feedback>
             </b-input-group>
-            <b-input-group class="mt-2" v-for="item in prettyHostList" :key="item.id">
+            <b-input-group class="mt-2" v-for="item in hostList" :key="item.id">
               <b-input-group-prepend is-text>
                 <b-form-checkbox
                   switch
                   class="mr-n2"
                   :checked="isSelected(item)"
                   @change="changeSelected(item)"
+                  :disabled="!item.status"
                 ></b-form-checkbox>
               </b-input-group-prepend>
-              <b-form-input readonly :value="item"></b-form-input>
+              <b-form-input readonly :value="item.name + '-' + item.ip"></b-form-input>
             </b-input-group>
           </b-card-body>
         </b-card>
@@ -90,11 +91,16 @@
                 id="add-program-name-feedback"
               >{{ $t('message.program.name.feedback') }}</b-form-invalid-feedback>
             </b-input-group>
-            <b-input-group class="mt-2" v-for="item in prettyHostList" :key="item.id">
+            <b-input-group class="mt-2" v-for="item in hostList" :key="item.id">
               <b-input-group-prepend is-text>
-                <b-form-checkbox switch class="mr-n2" @change="changeSelected(item)"></b-form-checkbox>
+                <b-form-checkbox
+                  switch
+                  :disabled="!item.status"
+                  class="mr-n2"
+                  @change="changeSelected(item)"
+                ></b-form-checkbox>
               </b-input-group-prepend>
-              <b-form-input readonly :value="item"></b-form-input>
+              <b-form-input readonly :value="item.name + '-' + item.ip"></b-form-input>
             </b-input-group>
           </b-card-body>
         </b-card>
@@ -140,7 +146,7 @@ export default {
       this.program = item.program;
 
       item.hostList.forEach(host => {
-        this.selected.push(host.id + "-" + host.name + "-" + host.ip);
+        this.selected.push(host);
       });
     },
     cancel() {
@@ -153,21 +159,11 @@ export default {
 
       await axios.put("/api/program", this.program);
 
-      this.selected.forEach(item => {
-        hostStr = item.split("-");
-
-        host = {
-          id: hostStr[0],
-          name: hostStr[1],
-          ip: hostStr[2]
-        };
-
-        hostList.push(host);
-      });
-
-      await axios.put("/api/program/" + this.program.id + "/host", hostList).then(() => {
-        document.location.reload();
-      });
+      await axios
+        .put("/api/program/" + this.program.id + "/host", this.selected)
+        .then(() => {
+          document.location.reload();
+        });
     },
     addProgramReady() {
       this.show = false;
@@ -182,20 +178,8 @@ export default {
       let hostStr = [];
       await axios.post("/api/program", this.program);
 
-      this.selected.forEach(item => {
-        hostStr = item.split("-");
-
-        host = {
-          id: hostStr[0],
-          name: hostStr[1],
-          ip: hostStr[2]
-        };
-
-        hostList.push(host);
-      });
-
       await axios
-        .post("/api/program/" + this.program.name + "/host", hostList)
+        .post("/api/program/" + this.program.name + "/host", this.selected)
         .then(() => {
           document.location.reload();
         });
@@ -215,15 +199,30 @@ export default {
       });
     },
     isSelected(item) {
-      return this.selected.indexOf(item) != -1;
+      return JSON.stringify(this.selected).indexOf(JSON.stringify(item)) != -1;
     },
     changeSelected(item) {
-      let indexOf = this.selected.indexOf(item);
+      let index = JSON.stringify(this.selected).indexOf(JSON.stringify(item));
 
-      if (indexOf == -1) {
-        this.selected.push(item);
+      if (this.isSelected(item)) {
+        this.removeObj(this.selected, item)
       } else {
-        this.selected.splice(indexOf, 1);
+        this.selected.push(item);
+      }
+
+      console.log(JSON.stringify(this.selected));
+    },
+    removeObj(arr, item) {
+      for (var i = 0; i < arr.length; i++) {
+        if (JSON.stringify(arr[i]) == JSON.stringify(item)) {
+          if (i == 0) {
+            this.selected.shift(); 
+          } else if (i == arr.length - 1) {
+            this.selected.pop(); 
+          } else {
+            this.selected.splice(i, 1); 
+          }
+        }
       }
     }
   },

@@ -25,7 +25,8 @@ module.exports = merge(webpackBase, {
 	},
 	devServer: {
 		proxy: {
-			'/': 'http://cm:8080'
+			'/': 'http://mine:8080'
+			// '/': 'http://localhost:8080'
 		}
 	},
 	plugins: [

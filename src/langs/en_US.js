@@ -1,8 +1,8 @@
 export const message = {
-	title: 'Hosts-Console',
+	title: 'Tool Box',
 	navbar: {
 		language: 'Language',
-		title: 'Hosts Console',
+		title: 'Tool Box',
 		hosts: 'Hosts',
 		program: 'Program'
 	},

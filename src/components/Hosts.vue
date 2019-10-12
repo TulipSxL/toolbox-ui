@@ -13,7 +13,13 @@
           <b-card-header class="d-flex justify-content-between align-items-center">
             {{ host.name }}
             <div>
-              <b-badge variant="success" href="#/hosts" @click="addHostReady()" pill>+</b-badge>
+              <b-badge
+                :variant="host.status ? 'warning' : 'success'"
+                href="#/hosts"
+                @click="changeStatus(host)"
+                pill
+              >{{ host.status ? '◼︎' : '▶' }}</b-badge>
+              <b-badge variant="primary" href="#/hosts" @click="addHostReady()" pill>+</b-badge>
               <b-badge variant="info" href="#/hosts" @click="editHostReady(host)" pill>≡</b-badge>
               <b-badge variant="danger" href="#/hosts" @click="deleteHost(host)" pill>x</b-badge>
             </div>
@@ -117,7 +123,8 @@ export default {
       host: {
         id: 0,
         name: "",
-        ip: ""
+        ip: "",
+        status: true
       },
       show: true,
       edit: false,
@@ -160,11 +167,18 @@ export default {
       axios.delete("/api/host/" + host.id).then(() => {
         document.location.reload();
       });
+    },
+    changeStatus(host) {
+      host.status = !host.status;
+
+      axios.put("/api/host/", host).then(() => {
+        document.location.reload();
+      });
     }
   },
   computed: {
     checkName() {
-      return this.host.name.length > 0
+      return this.host.name.length > 0;
     },
     checkIp() {
       let ipReg = /((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}/;

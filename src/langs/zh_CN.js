@@ -1,8 +1,8 @@
 export const message = {
-	title: 'Hosts 控制台',
+	title: '工具箱',
 	navbar: {
 		language: '语言',
-		title: 'Hosts 控制台',
+		title: '工具箱',
 		hosts: 'Hosts',
 		program: '方案'
 	},

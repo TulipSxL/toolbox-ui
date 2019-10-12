@@ -1,6 +1,6 @@
 {
   "name": "@lc3/observer-console",
-  "version": "1.1.0",
+  "version": "1.4.0",
   "description": "A console web UI for observer",
   "main": "index.js",
   "scripts": {
