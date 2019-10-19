@@ -8,15 +8,17 @@
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
           <b-nav-item
-            :class="{active : activeName.match('hosts')}"
-            href="#/hosts"
-            @click="active('hosts')"
-          >{{ $t("message.navbar.hosts") }}</b-nav-item>
-          <b-nav-item
+            v-for="item in navBar"
+            :key="item.id"
+            :class="{active : activeName.match(item)}"
+            :href="'#/' + item"
+            @click="active(item)"
+          >{{ $t("message.navbar." + item) }}</b-nav-item>
+          <!-- <b-nav-item
             :class="{active : activeName.match('program')}"
             href="#/program"
             @click="active('program')"
-          >{{ $t("message.navbar.program") }}</b-nav-item>
+          >{{ $t("message.navbar.program") }}</b-nav-item> -->
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown :text="$t('message.navbar.language')" right>
@@ -33,7 +35,8 @@
 export default {
   data() {
     return {
-      activeName: this.$route.path
+      activeName: this.$route.path,
+      navBar: ["hosts", "program", "shopping"]
     };
   },
   methods: {

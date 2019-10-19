@@ -4,7 +4,8 @@ export const message = {
 		language: 'Language',
 		title: 'Tool Box',
 		hosts: 'Hosts',
-		program: 'Program'
+		program: 'Program',
+		shopping: 'Shopping'
 	},
 	host: {
 		name: {
@@ -25,6 +26,7 @@ export const message = {
 			feedback: "Please input at least one letter"
 		}
 	},
+	shopping: {},
 	lang: {
 		cn: '中文',
 		us: 'English'

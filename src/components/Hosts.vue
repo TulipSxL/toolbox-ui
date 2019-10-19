@@ -14,6 +14,7 @@
             {{ host.name }}
             <div>
               <b-badge
+                :disabled="isSendRequest"
                 :variant="host.status ? 'warning' : 'success'"
                 href="#/hosts"
                 @click="changeStatus(host)"
@@ -21,7 +22,13 @@
               >{{ host.status ? '◼︎' : '▶' }}</b-badge>
               <b-badge variant="primary" href="#/hosts" @click="addHostReady()" pill>+</b-badge>
               <b-badge variant="info" href="#/hosts" @click="editHostReady(host)" pill>≡</b-badge>
-              <b-badge variant="danger" href="#/hosts" @click="deleteHost(host)" pill>x</b-badge>
+              <b-badge
+                :disabled="isSendRequest"
+                variant="danger"
+                href="#/hosts"
+                @click="deleteHost(host)"
+                pill
+              >x</b-badge>
             </div>
           </b-card-header>
 
@@ -39,7 +46,13 @@
           <b-card-header class="d-flex justify-content-between align-items-center">
             {{ $t('message.card.host.header.edit')}}
             <div>
-              <b-badge variant="success" href="#/hosts" @click="editHost()" pill>✓</b-badge>
+              <b-badge
+                :disabled="isSendRequest"
+                variant="success"
+                href="#/hosts"
+                @click="editHost()"
+                pill
+              >✓</b-badge>
               <b-badge variant="danger" href="#/hosts" @click="cancel()" pill>⤺</b-badge>
             </div>
           </b-card-header>
@@ -79,7 +92,13 @@
           <b-card-header class="d-flex justify-content-between align-items-center">
             {{ $t('message.card.host.header.add')}}
             <div>
-              <b-badge variant="success" href="#/hosts" @click="addHost()" pill>✓</b-badge>
+              <b-badge
+                :disabled="isSendRequest"
+                variant="success"
+                href="#/hosts"
+                @click="addHost()"
+                pill
+              >✓</b-badge>
               <b-badge variant="danger" href="#/hosts" @click="cancel()" pill>⤺</b-badge>
             </div>
           </b-card-header>
@@ -116,6 +135,8 @@
 
 <script>
 const axios = require("axios");
+const BASE_URL = "/api/host";
+const BASE_URL_SLASH = "/api/host/";
 export default {
   data() {
     return {
@@ -128,12 +149,13 @@ export default {
       },
       show: true,
       edit: false,
-      add: false
+      add: false,
+      isSendRequest: false
     };
   },
   methods: {
     getAllHost() {
-      axios.get("/api/host").then(({ data }) => {
+      axios.get(BASE_URL).then(({ data }) => {
         this.hostList = data;
       });
     },
@@ -146,7 +168,9 @@ export default {
       document.location.reload();
     },
     editHost() {
-      axios.put("/api/host/", this.host).then(() => {
+      this.isSendRequest = true;
+      axios.put(BASE_URL, this.host).then(() => {
+        this.isSendRequest = false;
         document.location.reload();
       });
     },
@@ -159,19 +183,22 @@ export default {
       };
     },
     addHost() {
-      axios.post("/api/host", this.host).then(() => {
+      this.isSendRequest = true;
+      axios.post(BASE_URL, this.host).then(() => {
         document.location.reload();
       });
     },
     deleteHost(host) {
-      axios.delete("/api/host/" + host.id).then(() => {
+      this.isSendRequest = true;
+      axios.delete(BASE_URL_SLASH + host.id).then(() => {
         document.location.reload();
       });
     },
     changeStatus(host) {
       host.status = !host.status;
+      this.isSendRequest = true;
 
-      axios.put("/api/host/", host).then(() => {
+      axios.put(BASE_URL_SLASH, host).then(() => {
         document.location.reload();
       });
     }

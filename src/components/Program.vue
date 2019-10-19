@@ -9,7 +9,13 @@
             <div>
               <b-badge variant="primary" href="#/program" @click="addProgramReady()" pill>+</b-badge>
               <b-badge variant="info" href="#/program" @click="editProgramReady(item)" pill>≡</b-badge>
-              <b-badge variant="danger" href="#/program" @click="deleteProgram(item.program)" pill>x</b-badge>
+              <b-badge
+                :disabled="isSendRequest"
+                variant="danger"
+                href="#/program"
+                @click="deleteProgram(item.program)"
+                pill
+              >x</b-badge>
             </div>
           </b-card-header>
           <b-list-group flush>
@@ -33,8 +39,19 @@
           <b-card-header class="d-flex justify-content-between align-items-center">
             {{ $t('message.card.program.header.edit') }}
             <div>
-              <b-badge variant="success" href="#/program" @click="editProgram()" pill>✓</b-badge>
-              <b-badge variant="danger" href="#/program" @click="cancel()" pill>⤺</b-badge>
+              <b-badge
+                :disabled="isSendRequest"
+                variant="success"
+                href="#/program"
+                @click="editProgram()"
+                pill
+              >✓</b-badge>
+              <b-badge
+                variant="danger"
+                href="#/program"
+                @click="cancel()"
+                pill
+              >⤺</b-badge>
             </div>
           </b-card-header>
 
@@ -74,7 +91,13 @@
           <b-card-header class="d-flex justify-content-between align-items-center">
             {{ $t('message.card.program.header.add')}}
             <div>
-              <b-badge variant="success" href="#/program" @click="addProgram()" pill>✓</b-badge>
+              <b-badge
+                :disabled="isSendRequest"
+                variant="success"
+                href="#/program"
+                @click="addProgram()"
+                pill
+              >✓</b-badge>
               <b-badge variant="danger" href="#/program" @click="cancel()" pill>⤺</b-badge>
             </div>
           </b-card-header>
@@ -111,6 +134,9 @@
 
 <script>
 const axios = require("axios");
+const BASE_URL = "/api/program"
+const BASE_URL_HOST = "/api/host"
+const BASE_URL_SLASH = "/api/program/"
 export default {
   data() {
     return {
@@ -131,12 +157,13 @@ export default {
       selected: [],
       prettyHostList: [],
       prettyHost: "",
-      changeName: true
+      changeName: true,
+      isSendRequest: false
     };
   },
   methods: {
     getAllProgram() {
-      axios.get("/api/program/host").then(({ data }) => {
+      axios.get(BASE_URL + "/host").then(({ data }) => {
         this.programList = data;
       });
     },
@@ -153,14 +180,15 @@ export default {
       document.location.reload();
     },
     async editProgram() {
+      this.isSendRequest = true;
       let host = {};
       let hostList = [];
       let hostStr = [];
 
-      await axios.put("/api/program", this.program);
+      await axios.put(BASE_URL, this.program);
 
       await axios
-        .put("/api/program/" + this.program.id + "/host", this.selected)
+        .put(BASE_URL_SLASH+ this.program.id + "/host", this.selected)
         .then(() => {
           document.location.reload();
         });
@@ -173,24 +201,26 @@ export default {
       };
     },
     async addProgram() {
+      this.isSendRequest = true;
       let host = {};
       let hostList = [];
       let hostStr = [];
-      await axios.post("/api/program", this.program);
+      await axios.post(BASE_URL, this.program);
 
       await axios
-        .post("/api/program/" + this.program.name + "/host", this.selected)
+        .post(BASE_URL_SLASH + this.program.name + "/host", this.selected)
         .then(() => {
           document.location.reload();
         });
     },
     deleteProgram(program) {
-      axios.delete("/api/program/" + program.id).then(() => {
+      this.isSendRequest = true;
+      axios.delete(BASE_URL_SLASH + program.id).then(() => {
         document.location.reload();
       });
     },
     getAllHost() {
-      axios.get("/api/host").then(({ data }) => {
+      axios.get(BASE_URL_HOST).then(({ data }) => {
         this.hostList = data;
 
         this.hostList.forEach(host => {
@@ -209,8 +239,6 @@ export default {
       } else {
         this.selected.push(item);
       }
-
-      console.log(JSON.stringify(this.selected));
     },
     removeObj(arr, item) {
       for (var i = 0; i < arr.length; i++) {
