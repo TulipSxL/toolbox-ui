@@ -1,11 +1,12 @@
 export const message = {
-	title: '工具箱',
+	title: "工具箱",
 	navbar: {
-		language: '语言',
-		title: '工具箱',
-		hosts: 'Hosts',
-		program: '方案',
-		shopping: '购物单'
+		language: "语言",
+		title: "工具箱",
+		hosts: "Hosts",
+		program: "方案",
+		shopping: "购物单",
+		amount: "额度"
 	},
 	host: {
 		name: {
@@ -40,9 +41,37 @@ export const message = {
 			}
 		}
 	},
+	amount: {
+		card: {
+			total: "总额度为",
+			current: "当前额度为",
+			average: "平均每日额度为",
+			remain: "本月剩余",
+			yuan: "元",
+			day: "天"
+		},
+		button: {
+			add: "新增消费",
+			set: "增加额度"
+		},
+		month: {
+			January: "一月",
+			February: "二月",
+			March: "三月",
+			April: "四月",
+			May: "五月",
+			June: "六月",
+			July: "七月",
+			August: "八月",
+			September: "九月",
+			October: "十月",
+			November: "十一月",
+			December: "十二月"
+		}
+	},
 	lang: {
-		cn: '中文',
-		us: 'English'
+		cn: "中文",
+		us: "English"
 	},
 	card: {
 		host: {

@@ -46,13 +46,7 @@
           <b-card-header class="d-flex justify-content-between align-items-center">
             {{ $t('message.card.host.header.edit')}}
             <div>
-              <b-badge
-                :disabled="isSendRequest"
-                variant="success"
-                href="#/hosts"
-                @click="editHost()"
-                pill
-              >✓</b-badge>
+              <b-badge variant="success" href="#/hosts" @click="editHost()" pill>✓</b-badge>
               <b-badge variant="danger" href="#/hosts" @click="cancel()" pill>⤺</b-badge>
             </div>
           </b-card-header>
@@ -170,8 +164,8 @@ export default {
     editHost() {
       this.isSendRequest = true;
       axios.put(BASE_URL, this.host).then(() => {
-        this.isSendRequest = false;
-        document.location.reload();
+        this.show = true;
+        this.edit = false;
       });
     },
     addHostReady() {
@@ -184,6 +178,8 @@ export default {
     },
     addHost() {
       this.isSendRequest = true;
+      this.host.status = 1;
+
       axios.post(BASE_URL, this.host).then(() => {
         document.location.reload();
       });
@@ -191,7 +187,7 @@ export default {
     deleteHost(host) {
       this.isSendRequest = true;
       axios.delete(BASE_URL_SLASH + host.id).then(() => {
-        document.location.reload();
+        this.getAllHost();
       });
     },
     changeStatus(host) {

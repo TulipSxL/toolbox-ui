@@ -1,6 +1,6 @@
 {
   "name": "@lc3/observer-console",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "A console web UI for observer",
   "main": "index.js",
   "scripts": {
@@ -49,6 +49,7 @@
   "homepage": "https://github.com/lemonce3/observer-console#readme",
   "dependencies": {
     "axios": "^0.18.1",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "vue-router": "^3.0.2"
   }
 }

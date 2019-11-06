@@ -2,7 +2,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Hosts from './components/Hosts.vue';
 import Program from './components/Program.vue'
-import Shopping from './components/shopping.vue'
+import Shopping from './components/Shopping.vue'
+import Amount from './components/Amount.vue'
 
 Vue.use(Router);
 
@@ -10,7 +11,7 @@ export default new Router({
 	routes: [
 		{
 			path: '/',
-			redirect: '/hosts'
+			redirect: '/shopping'
 		},
 		{
 			path: '/hosts',
@@ -27,5 +28,10 @@ export default new Router({
 			name: 'shopping',
 			component: Shopping
 		},
+		{
+			path: '/amount',
+			name: 'amount',
+			component: Amount
+		}
 	]
 });

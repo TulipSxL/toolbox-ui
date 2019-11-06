@@ -1,6 +1,7 @@
 const webpackBase = require('./webpack.base');
 const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = merge(webpackBase, {
 	mode: 'production',
@@ -23,5 +24,8 @@ module.exports = merge(webpackBase, {
 	},
 	plugins: [
 		new ExtractTextPlugin('style.css'),
-	]
+	],
+	optimization: {
+    minimizer: [new UglifyJsPlugin()]
+  }
 });

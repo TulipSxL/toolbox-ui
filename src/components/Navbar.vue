@@ -36,7 +36,7 @@ export default {
   data() {
     return {
       activeName: this.$route.path,
-      navBar: ["hosts", "program", "shopping"]
+      navBar: ["hosts", "program", "shopping", "amount"]
     };
   },
   methods: {
