@@ -1,12 +1,18 @@
 export const message = {
 	title: "工具箱",
 	navbar: {
-		language: "语言",
-		title: "工具箱",
-		hosts: "Hosts",
-		program: "方案",
-		shopping: "购物单",
-		amount: "额度"
+		item: {
+			language: "语言",
+			host: "Host",
+			shopping: "购物单",
+			consumption: "消费"
+		},
+		dropdown: {
+			hosts: "Host",
+			program: "方案",
+			amount: "额度",
+			consumeLog: "消费记录"
+		}
 	},
 	host: {
 		name: {
@@ -46,7 +52,10 @@ export const message = {
 			total: "总额度为",
 			current: "当前额度为",
 			average: "平均每日额度为",
-			remain: "本月剩余",
+			remain: {
+				month: "本月剩余",
+				today: "本日剩余"
+			},
 			yuan: "元",
 			day: "天"
 		},

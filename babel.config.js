@@ -1,12 +1,12 @@
 module.exports = api => {
-	api.cache(true);
+  api.cache(true);
 
-	return {
-		presets: [
-			'@babel/env'
-		],
-		plugins: [
-			'@babel/transform-runtime'
-		]
-	};
+  return {
+    presets: [
+      "@babel/env"
+    ],
+    plugins: [
+      "@babel/transform-runtime"
+    ]
+  };
 };

@@ -10,10 +10,11 @@
           :key="amount.id"
           :header="$t('message.amount.month.' + amount.month) + $t('message.amount.card.total') + amount.total + $t('message.amount.card.yuan')"
           :title="$t('message.amount.card.current') + (amount.total - amount.cost).toFixed(2) + $t('message.amount.card.yuan')"
-          :footer="$t('message.amount.card.remain') + remainDay(amount) + $t('message.amount.card.day')"
+          :footer="$t('message.amount.card.remain.month') + remainDay(amount) + $t('message.amount.card.day')"
         >
-          <b-card-text>{{$t("message.amount.card.average") + averageAmount(amount) + $t("message.amount.card.yuan")}}</b-card-text>
           <div v-if="isActive(amount)">
+            <b-card-text>{{$t("message.amount.card.average") + amount.average + $t("message.amount.card.yuan")}}</b-card-text>
+            <b-card-text>{{$t("message.amount.card.remain.today") + today.remain + $t("message.amount.card.yuan")}}</b-card-text>
             <b-input-group class="mb-2" prepend="¥">
               <b-form-input v-model="tempAmount.consumption"></b-form-input>
               <b-input-group-append>
@@ -45,6 +46,7 @@
 const axios = require("axios");
 const BASE_URL_AMOUNT = "/api/amount";
 const BASE_URL_AMOUNT_SLASH = "/api/amount/";
+const TIMESTAMP = new Date().getTime();
 export default {
   data() {
     return {
@@ -68,26 +70,14 @@ export default {
         consumption: "",
         total: ""
       },
-      isSendRequest: false
+      isSendRequest: false,
+      today: {
+        date: 0,
+        remain: 0
+      }
     };
   },
   methods: {
-    averageAmount(amount) {
-      const today = new Date();
-      const now = today.getDate();
-      const year = today.getYear();
-      const month = today.getMonth();
-
-      if (this.isActive(amount)) {
-        if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
-          dayArr[1] = "29";
-        }
-
-        return ((amount.total - amount.cost) / this.remainDay(amount)).toFixed(2);
-      } else {
-        return ((amount.total - amount.cost) / this.dayArr[month]).toFixed(2);
-      }
-    },
     remainDay(amount) {
       const today = new Date();
       const now = today.getDate();
@@ -100,21 +90,21 @@ export default {
       }
     },
     consume(amount) {
-      amount.cost = amount.cost + Number(this.tempAmount.consumption);
+      amount.cost += Number(this.tempAmount.consumption);
+      amount.consumption += Number(this.tempAmount.consumption);
       this.isSendRequest = true;
 
       axios.put(BASE_URL_AMOUNT_SLASH, amount).then(() => {
-        this.isSendRequest = false;
-        this.tempAmount.consumption = "";
+        window.location.reload();
       });
     },
     isActive(amount) {
-      const today = new Date();
-      const month = today.getMonth();
+      const month = new Date().getMonth();
+
       return month == this.monthArr.indexOf(amount.month);
     },
     addAmount(amount) {
-      amount.total = amount.total + Number(this.tempAmount.total);
+      amount.total += Number(this.tempAmount.total);
       this.isSendRequest = true;
 
       axios.put(BASE_URL_AMOUNT_SLASH, amount).then(() => {
@@ -122,28 +112,22 @@ export default {
         this.tempAmount.total = "";
       });
     },
-    getAllAmount() {
-      axios.get(BASE_URL_AMOUNT).then(({ data }) => {
+    async getAllAmount() {
+      await axios.get(BASE_URL_AMOUNT + "?timestamp=" + TIMESTAMP).then(({ data }) => {
         this.all = data;
       });
     }
   },
-  computed: {
-    canSearch() {
-      return this.thing.name.length <= 0;
-    }
-  },
-  mounted() {
-    this.getAllAmount();
-  },
-  watch: {
-    "amount.cost": {
-      handler(newValue, oldValue) {
-        amount.cost = newValue;
-        amount.current = amount.total - newValue;
-      },
-      deep: true
-    }
+  async mounted() {
+    await this.getAllAmount();
+
+    this.all.forEach(item => {
+      item.amountList.forEach(amount => {
+        if (this.isActive(amount)) {
+          this.today.remain = (amount.average - amount.consumption).toFixed(2);
+        }
+      });
+    });
   }
 };
 </script>

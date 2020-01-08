@@ -181,10 +181,6 @@ export default {
     },
     async editProgram() {
       this.isSendRequest = true;
-      let host = {};
-      let hostList = [];
-      let hostStr = [];
-
       await axios.put(BASE_URL, this.program);
 
       await axios
@@ -202,9 +198,6 @@ export default {
     },
     async addProgram() {
       this.isSendRequest = true;
-      let host = {};
-      let hostList = [];
-      let hostStr = [];
       await axios.post(BASE_URL, this.program);
 
       await axios
@@ -232,8 +225,6 @@ export default {
       return JSON.stringify(this.selected).indexOf(JSON.stringify(item)) != -1;
     },
     changeSelected(item) {
-      let index = JSON.stringify(this.selected).indexOf(JSON.stringify(item));
-
       if (this.isSelected(item)) {
         this.removeObj(this.selected, item)
       } else {

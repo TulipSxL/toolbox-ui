@@ -96,7 +96,7 @@ const axios = require("axios");
 const BASE_URL_THING = "/api/thing";
 const BASE_URL_THING_SLASH = "/api/thing/";
 const BASE_URL_CATEGORY = "/api/category";
-const BASE_URL_CATEGORY_SLASH = "/api/category/";
+// const BASE_URL_CATEGORY_SLASH = "/api/category/";
 export default {
   data() {
     return {
@@ -136,7 +136,7 @@ export default {
     },
     addThing() {
       this.isSendRequest = true;
-      axios.post(BASE_URL_THING, this.thing).then(data => {
+      axios.post(BASE_URL_THING, this.thing).then(() => {
         document.location.reload();
       });
     },

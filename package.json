@@ -1,7 +1,7 @@
 {
-  "name": "@lc3/observer-console",
-  "version": "1.6.0",
-  "description": "A console web UI for observer",
+  "name": "@tulip_sxl/toolbox-ui",
+  "version": "1.6.1",
+  "description": "A console web UI for toolbox",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,13 +10,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lemonce3/observer-console.git"
+    "url": "git+https://github.com/tulip_sxl/toolbox-ui.git"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lemonce3/observer-console/issues"
+    "url": "https://github.com/tulip_sxl/toolbox-ui/issues"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
@@ -40,7 +40,7 @@
     "vue-loader": "^15.4.2",
     "vue-template-compiler": "^2.5.17",
     "vuelidate": "^0.7.4",
-    "webpack": "^4.24.0",
+    "webpack": "^4.41.2",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.10",
     "webpack-merge": "^4.1.4",
@@ -49,6 +49,9 @@
   "homepage": "https://github.com/lemonce3/observer-console#readme",
   "dependencies": {
     "axios": "^0.18.1",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.6.0",
+    "eslint-plugin-vue": "^6.0.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "vue-router": "^3.0.2"
   }
