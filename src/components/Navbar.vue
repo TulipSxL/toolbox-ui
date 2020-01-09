@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       activeName: this.$route.path,
-      navBarItem: ["shopping"],
+      navBarItem: ["shopping", "record"],
       navBarItemDropdown: [
         {
           name: "host",

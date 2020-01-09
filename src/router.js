@@ -4,6 +4,7 @@ import Hosts from "./components/Hosts.vue";
 import Program from "./components/Program.vue"
 import Shopping from "./components/Shopping.vue"
 import Amount from "./components/Amount.vue"
+import Record from "./components/Record.vue"
 
 Vue.use(Router);
 
@@ -32,6 +33,11 @@ export default new Router({
       path: "/amount",
       name: "amount",
       component: Amount
+    },
+    {
+      path: "/record",
+      name: "record",
+      component: Record
     }
   ]
 });

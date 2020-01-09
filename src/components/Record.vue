@@ -1,0 +1,262 @@
+<template>
+  <!-- Show All -->
+  <div>
+    <div>
+      <b-jumbotron header="炉石战棋" :lead="'分数：' + currentScore">
+        <hr class="my-4" />
+        <b-button variant="primary" v-b-modal.add-new-record>开搞</b-button>
+      </b-jumbotron>
+    </div>
+    <div>
+      <b-card-group columns>
+        <b-card no-body v-for="item in all" :key="item.id">
+          <b-card-header class="d-flex justify-content-between align-items-center">
+            {{ item.date }}
+            <div>
+              <b-badge :disabled="isSendRequest" variant="success" pill v-b-modal.add-new-record>+</b-badge>
+              <b-badge :disabled="isSendRequest" variant="primary" pill v-b-modal.edit-record>≡</b-badge>
+              <b-badge :disabled="isSendRequest" variant="danger" pill href="#/record" @click="deleteRecord()">x</b-badge>
+            </div>
+          </b-card-header>
+          <b-table
+            striped
+            selectable
+            select-mode="single"
+            hover
+            :items="item.records"
+            :fields="fields"
+            @row-selected="onRowSelected"
+          >
+            <template v-slot:cell(selected)="{ rowSelected }">
+              <template v-if="rowSelected">
+                <span aria-hidden="true">&check;</span>
+                <span class="sr-only">Selected</span>
+              </template>
+              <template v-else>
+                <span aria-hidden="true">&nbsp;</span>
+                <span class="sr-only">Not selected</span>
+              </template>
+            </template>
+          </b-table>
+        </b-card>
+      </b-card-group>
+    </div>
+
+    <!-- Add New Record -->
+    <div>
+      <b-modal id="add-new-record" title="添加新战绩" @ok="addNewRecord()">
+        <label for="name">英雄名称:</label>
+        <b-form-select id="name" v-model="newRecord.name" :options="heroes" class="mb-3">
+          <template v-slot:first>
+            <option :value="null" disabled>请选择你的英雄</option>
+          </template>
+        </b-form-select>
+        <label for="add-rank">本场排名:</label>
+        <b-form-input
+          id="add-rank"
+          v-model="newRecord.rank"
+          :state="validate(newRecord.rank, ['NOT_NULL', 'NUMBER', 'RANGE'], [1, 8])"
+          aria-describedby="add-rank-feedback"
+          placeholder="请输入本场排名"
+          trimadd
+        ></b-form-input>
+        <b-form-invalid-feedback id="add-rank-feedback">排名不能为空且只能为1～8的数字</b-form-invalid-feedback>
+        <label for="add-increment">加减分数:</label>
+        <b-form-input
+          id="add-increment"
+          v-model="newRecord.increment"
+          :state="validate(newRecord.increment, ['NOT_NULL', 'NUMBER'])"
+          aria-describedby="add-increment-feedback"
+          placeholder="请输入分数变动"
+          trim
+        ></b-form-input>
+        <b-form-invalid-feedback id="add-increment-feedback">加减分数不能为空且只能为数字</b-form-invalid-feedback>
+        <label for="add-score">当前分数:</label>
+        <b-form-input
+          id="add-score"
+          v-model="newRecord.score"
+          :state="validate(newRecord.score, ['NOT_NULL', 'NUMBER'])"
+          aria-describedby="add-score-feedback"
+          placeholder="请输入当前分数"
+          trim
+        ></b-form-input>
+        <b-form-invalid-feedback id="add-score-feedback">当前分数不能为空且只能为数字</b-form-invalid-feedback>
+        <label for="add-time">时间:</label>
+        <b-form-input
+          id="add-time"
+          v-model="newRecord.time"
+          :state="validate(newRecord.time, ['NOT_NULL', 'TIME'])"
+          aria-describedby="add-time-feedback"
+          placeholder="请输入时间"
+          trimedit
+        ></b-form-input>
+        <b-form-invalid-feedback id="add-time-feedback">时间不能为空且格式为HH:mm:SS</b-form-invalid-feedback>
+      </b-modal>
+    </div>
+
+    <!-- Edit Record -->
+    <div>
+      <b-modal id="edit-record" title="编辑战绩" @ok="editRecord()">
+        <label for="name">英雄名称:</label>
+        <b-form-select id="name" v-model="selected.name" :options="heroes" class="mb-3">
+          <template v-slot:first>
+            <option :value="null" disabled>请选择你的英雄</option>
+          </template>
+        </b-form-select>
+        <label for="edit-rank">本场排名:</label>
+        <b-form-input
+          id="edit-rank"
+          v-model="selected.rank"
+          :state="validate(selected.rank, ['NOT_NULL', 'NUMBER', 'RANGE'], [1, 8])"
+          aria-describedby="edit-rank-feedback"
+          placeholder="请输入本场排名"
+          trim
+        ></b-form-input>
+        <b-form-invalid-feedback id="edit-rank-feedback">排名不能为空且只能为1～8的数字</b-form-invalid-feedback>
+        <label for="edit-increment">加减分数:</label>
+        <b-form-input
+          id="edit-increment"
+          v-model="selected.increment"
+          :state="validate(selected.increment, ['NOT_NULL', 'NUMBER'])"
+          aria-describedby="edit-increment-feedback"
+          placeholder="请输入分数变动"
+          trim
+        ></b-form-input>
+        <b-form-invalid-feedback id="edit-increment-feedback">加减分数不能为空且只能为数字</b-form-invalid-feedback>
+        <label for="edit-score">当前分数:</label>
+        <b-form-input
+          id="edit-score"
+          v-model="selected.score"
+          :state="validate(selected.score, ['NOT_NULL', 'NUMBER'])"
+          aria-describedby="edit-score-feedback"
+          placeholder="请输入当前分数"
+          trim
+        ></b-form-input>
+        <b-form-invalid-feedback id="edit-score-feedback">当前分数不能为空且只能为数字</b-form-invalid-feedback>
+        <label for="edit-time">时间:</label>
+        <b-form-input
+          id="edit-time"
+          v-model="selected.time"
+          :state="validate(selected.time, ['NOT_NULL', 'TIME'])"
+          aria-describedby="edit-time-feedback"
+          placeholder="请输入时间"
+          trim
+        ></b-form-input>
+        <b-form-invalid-feedback id="input-time-feedback">时间不能为空且格式为HH:mm:SS</b-form-invalid-feedback>
+      </b-modal>
+    </div>
+  </div>
+</template>
+
+<script>
+const axios = require("axios");
+const BASE_URL_HERO = "/api/hs_hero";
+const BASE_URL_RECORD = "/api/hs_record";
+const BASE_URL_RECORD_SLASH = "/api/hs_record/";
+export default {
+  data() {
+    return {
+      all: [],
+      fields: [
+        {
+          key: "selected",
+          label: "选中状态"
+        },
+        {
+          key: "name",
+          label: "名称"
+        },
+        {
+          key: "rank",
+          label: "排名"
+        },
+        {
+          key: "increment",
+          label: "分数变动"
+        },
+        {
+          key: "score",
+          label: "当前分数"
+        },
+        {
+          key: "time",
+          label: "时间"
+        }
+      ],
+      currentScore: 0,
+      selected: {},
+      heroes: [],
+      newRecord: {
+        name: null
+      },
+      isSendRequest: false
+    };
+  },
+  methods: {
+    onRowSelected(items) {
+      this.selected = items[0];
+    },
+    validate(value, ruler, range) {
+      let validate = false;
+      ruler.forEach(item => {
+        if (item == "NOT_NULL") {
+          validate = value !== null && value !== undefined;
+        }
+
+        if (item == "NUMBER") {
+          const onlyNumber = new RegExp("^-?\\d{1,}$");
+          validate = onlyNumber.test(value);
+        }
+
+        if (item == "TIME") {
+          const onlyTime = new RegExp(
+            "^(([0-2][0-3])|([0-1][0-9])):[0-5][0-9]:[0-5][0-9]$"
+          );
+          validate = onlyTime.test(value);
+        }
+
+        if (item == "RANGE") {
+          validate = value >= range[0] && value <= range[1];
+        }
+      });
+
+      return validate;
+    },
+    addNewRecord() {
+      this.isSendRequest = true;
+      axios.post(BASE_URL_RECORD, this.newRecord).then(() => {
+        document.location.reload();
+      });
+    },
+    editRecord() {
+      this.isSendRequest = true;
+      axios.put(BASE_URL_RECORD, this.selected).then(() => {
+        document.location.reload();
+      });
+    },
+    deleteRecord() {
+      this.isSendRequest = true;
+      axios.delete(BASE_URL_RECORD_SLASH + this.selected.id).then(() => {
+        document.location.reload();
+      });
+    },
+    getAllHero() {
+      axios.get(BASE_URL_HERO).then(({ data }) => {
+        this.heroes = data;
+      });
+    },
+    async getAllRecord() {
+      await axios.get(BASE_URL_RECORD).then(({ data }) => {
+        this.all = data;
+      });
+    }
+  },
+  computed: {},
+  async mounted() {
+    this.getAllHero();
+    await this.getAllRecord();
+
+    this.currentScore = this.all[0].records[0].score;
+  }
+};
+</script>

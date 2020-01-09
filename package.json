@@ -1,6 +1,6 @@
 {
   "name": "@tulip_sxl/toolbox-ui",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "A console web UI for toolbox",
   "main": "index.js",
   "scripts": {
@@ -19,11 +19,11 @@
     "url": "https://github.com/tulip_sxl/toolbox-ui/issues"
   },
   "devDependencies": {
-    "@babel/core": "^7.1.2",
-    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-transform-runtime": "^7.7.6",
     "@babel/polyfill": "^7.0.0",
-    "@babel/preset-env": "^7.1.0",
-    "@babel/runtime": "^7.1.2",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/runtime": "^7.7.7",
     "babel-loader": "^8.0.4",
     "bootstrap-vue": "^2.0.2",
     "cross-env": "^5.2.0",
@@ -35,14 +35,14 @@
     "less-loader": "^4.1.0",
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",
-    "vue": "^2.5.17",
-    "vue-i18n": "^8.3.1",
-    "vue-loader": "^15.4.2",
-    "vue-template-compiler": "^2.5.17",
+    "vue": "^2.6.11",
+    "vue-i18n": "^8.15.3",
+    "vue-loader": "^15.8.3",
+    "vue-template-compiler": "^2.6.11",
     "vuelidate": "^0.7.4",
-    "webpack": "^4.41.2",
+    "webpack": "^4.41.5",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10",
+    "webpack-dev-server": "^3.10.1",
     "webpack-merge": "^4.1.4",
     "yml-loader": "^2.1.0"
   },
@@ -50,8 +50,8 @@
   "dependencies": {
     "axios": "^0.18.1",
     "babel-eslint": "^10.0.3",
-    "eslint": "^6.6.0",
-    "eslint-plugin-vue": "^6.0.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-vue": "^6.1.2",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "vue-router": "^3.0.2"
   }
