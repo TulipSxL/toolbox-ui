@@ -11,11 +11,23 @@
       <b-card-group columns>
         <b-card no-body v-for="item in all" :key="item.id">
           <b-card-header class="d-flex justify-content-between align-items-center">
-            {{ item.date }}
             <div>
-              <b-badge :disabled="isSendRequest" variant="success" pill v-b-modal.add-new-record>+</b-badge>
-              <b-badge :disabled="isSendRequest" variant="primary" pill v-b-modal.edit-record>≡</b-badge>
-              <b-badge :disabled="isSendRequest" variant="danger" pill href="#/record" @click="deleteRecord()">x</b-badge>
+              {{ item.date }}
+              <b-badge
+                :variant="item.changedScore >= 0 ? 'success' : 'danger'"
+                
+              >{{ item.changedScore >= 0 ? '+' + item.changedScore : item.changedScore }}</b-badge>
+            </div>
+            <div>
+              <b-badge :disabled="isSendRequest" variant="primary" pill v-b-modal.add-new-record>+</b-badge>
+              <b-badge :disabled="isSendRequest" variant="secondary" pill v-b-modal.edit-record>≡</b-badge>
+              <b-badge
+                :disabled="isSendRequest"
+                variant="danger"
+                pill
+                href="#/record"
+                @click="deleteRecord()"
+              >x</b-badge>
             </div>
           </b-card-header>
           <b-table
@@ -54,8 +66,9 @@
         <label for="add-rank">本场排名:</label>
         <b-form-input
           id="add-rank"
+          type="number"
           v-model="newRecord.rank"
-          :state="validate(newRecord.rank, ['NOT_NULL', 'NUMBER', 'RANGE'], [1, 8])"
+          :state="validate(newRecord.rank, ['NOT_NULL', 'RANGE'], [1, 8])"
           aria-describedby="add-rank-feedback"
           placeholder="请输入本场排名"
           trimadd
@@ -64,8 +77,9 @@
         <label for="add-increment">加减分数:</label>
         <b-form-input
           id="add-increment"
+          type="number"
           v-model="newRecord.increment"
-          :state="validate(newRecord.increment, ['NOT_NULL', 'NUMBER'])"
+          :state="validate(newRecord.increment, ['NOT_NULL'])"
           aria-describedby="add-increment-feedback"
           placeholder="请输入分数变动"
           trim
@@ -74,8 +88,9 @@
         <label for="add-score">当前分数:</label>
         <b-form-input
           id="add-score"
+          type="number"
           v-model="newRecord.score"
-          :state="validate(newRecord.score, ['NOT_NULL', 'NUMBER'])"
+          :state="validate(newRecord.score, ['NOT_NULL'])"
           aria-describedby="add-score-feedback"
           placeholder="请输入当前分数"
           trim
@@ -203,11 +218,6 @@ export default {
           validate = value !== null && value !== undefined;
         }
 
-        if (item == "NUMBER") {
-          const onlyNumber = new RegExp("^-?\\d{1,}$");
-          validate = onlyNumber.test(value);
-        }
-
         if (item == "TIME") {
           const onlyTime = new RegExp(
             "^(([0-2][0-3])|([0-1][0-9])):[0-5][0-9]:[0-5][0-9]$"
@@ -257,6 +267,16 @@ export default {
     await this.getAllRecord();
 
     this.currentScore = this.all[0].records[0].score;
+  },
+  watch: {
+    "newRecord.increment": function() {
+      this.newRecord.score =
+        Number(this.currentScore) + Number(this.newRecord.increment);
+
+      let now = new Date();
+      this.newRecord.time =
+        now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+    }
   }
 };
 </script>
