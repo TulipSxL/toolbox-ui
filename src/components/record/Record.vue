@@ -1,12 +1,17 @@
 <template>
-  <!-- Show All -->
   <div>
+    <!-- Modal -->
     <div>
-      <b-jumbotron header="炉石战棋" :lead="'分数：' + currentScore">
+      <b-jumbotron header="炉石战棋" :lead="'分数：' + currentScore + '\t最高分：' + highestScore">
         <hr class="my-4" />
         <b-button variant="primary" v-b-modal.add-new-record>开搞</b-button>
+        <b-button variant="primary" v-b-modal.search>查询</b-button>
+        <b-button variant="primary" @click="clear()">清除</b-button>
+        <b-button variant="primary" href="#/record/rank">排名</b-button>
       </b-jumbotron>
     </div>
+
+    <!-- Datas -->
     <div>
       <b-card-group columns>
         <b-card no-body v-for="item in all" :key="item.id">
@@ -15,7 +20,6 @@
               {{ item.date }}
               <b-badge
                 :variant="item.changedScore >= 0 ? 'success' : 'danger'"
-                
               >{{ item.changedScore >= 0 ? '+' + item.changedScore : item.changedScore }}</b-badge>
             </div>
             <div>
@@ -57,8 +61,8 @@
     <!-- Add New Record -->
     <div>
       <b-modal id="add-new-record" title="添加新战绩" @ok="addNewRecord()">
-        <label for="name">英雄名称:</label>
-        <b-form-select id="name" v-model="newRecord.name" :options="heroes" class="mb-3">
+        <label for="add-name">英雄名称:</label>
+        <b-form-select id="add-name" v-model="newRecord.name" :options="heroes" class="mb-3">
           <template v-slot:first>
             <option :value="null" disabled>请选择你的英雄</option>
           </template>
@@ -112,8 +116,8 @@
     <!-- Edit Record -->
     <div>
       <b-modal id="edit-record" title="编辑战绩" @ok="editRecord()">
-        <label for="name">英雄名称:</label>
-        <b-form-select id="name" v-model="selected.name" :options="heroes" class="mb-3">
+        <label for="edit-name">英雄名称:</label>
+        <b-form-select id="edit-name" v-model="selected.name" :options="heroes" class="mb-3">
           <template v-slot:first>
             <option :value="null" disabled>请选择你的英雄</option>
           </template>
@@ -121,8 +125,9 @@
         <label for="edit-rank">本场排名:</label>
         <b-form-input
           id="edit-rank"
+          type="number"
           v-model="selected.rank"
-          :state="validate(selected.rank, ['NOT_NULL', 'NUMBER', 'RANGE'], [1, 8])"
+          :state="validate(selected.rank, ['NOT_NULL', 'RANGE'], [1, 8])"
           aria-describedby="edit-rank-feedback"
           placeholder="请输入本场排名"
           trim
@@ -131,8 +136,9 @@
         <label for="edit-increment">加减分数:</label>
         <b-form-input
           id="edit-increment"
+          type="number"
           v-model="selected.increment"
-          :state="validate(selected.increment, ['NOT_NULL', 'NUMBER'])"
+          :state="validate(selected.increment, ['NOT_NULL'])"
           aria-describedby="edit-increment-feedback"
           placeholder="请输入分数变动"
           trim
@@ -141,8 +147,9 @@
         <label for="edit-score">当前分数:</label>
         <b-form-input
           id="edit-score"
+          type="number"
           v-model="selected.score"
-          :state="validate(selected.score, ['NOT_NULL', 'NUMBER'])"
+          :state="validate(selected.score, ['NOT_NULL'])"
           aria-describedby="edit-score-feedback"
           placeholder="请输入当前分数"
           trim
@@ -158,6 +165,37 @@
           trim
         ></b-form-input>
         <b-form-invalid-feedback id="input-time-feedback">时间不能为空且格式为HH:mm:SS</b-form-invalid-feedback>
+      </b-modal>
+    </div>
+
+    <!-- Search Record -->
+    <div>
+      <b-modal id="search" title="搜索" @ok="searchRecord()">
+        <label for="search-name">英雄名称:</label>
+        <b-form-select id="search-name" v-model="search.name" :options="heroes" class="mb-3">
+          <template v-slot:first>
+            <option :value="null" disabled>请选择你的英雄</option>
+          </template>
+        </b-form-select>
+        <label for="search-begin-date">开始日期:</label>
+        <b-form-input
+          id="search-begin-date"
+          type="date"
+          v-model="search.beginDate"
+          placeholder="请输入开始日期"
+          trim
+        ></b-form-input>
+        <label for="search-begin-date">结束日期:</label>
+        <b-form-input
+          id="search-end-date"
+          type="date"
+          v-model="search.endDate"
+          :state="validate(search.endDate, ['GE_BEGIN'], [search.beginDate])"
+          aria-describedby="search-end-date"
+          placeholder="请输入结束日期"
+          trim
+        ></b-form-input>
+        <b-form-invalid-feedback id="search-end-date">结束日期不能小于开始日期</b-form-invalid-feedback>
       </b-modal>
     </div>
   </div>
@@ -199,12 +237,16 @@ export default {
         }
       ],
       currentScore: 0,
+      highestScore: 0,
       selected: {},
       heroes: [],
       newRecord: {
         name: null
       },
-      isSendRequest: false
+      isSendRequest: false,
+      search: {
+        name: null
+      }
     };
   },
   methods: {
@@ -227,6 +269,20 @@ export default {
 
         if (item == "RANGE") {
           validate = value >= range[0] && value <= range[1];
+        }
+
+        if (item == "GE_BEGIN") {
+          if (
+            range[0] !== null &&
+            range[0] !== undefined &&
+            value !== null &&
+            value !== undefined
+          ) {
+            validate =
+              new Date(value).getTime() >= new Date(range[0]).getTime();
+          } else {
+            validate = true;
+          }
         }
       });
 
@@ -259,6 +315,28 @@ export default {
       await axios.get(BASE_URL_RECORD).then(({ data }) => {
         this.all = data;
       });
+    },
+    searchRecord() {
+      let queryUrl = BASE_URL_RECORD;
+
+      if (this.search.name != null) {
+        queryUrl += "?name=" + this.search.name;
+      }
+
+      if (this.search.beginDate != undefined) {
+        queryUrl += "?beginDate=" + this.search.beginDate;
+      }
+
+      if (this.search.endDate != undefined) {
+        queryUrl += "?endDate=" + this.search.endDate;
+      }
+
+      axios.get(queryUrl).then(({ data }) => {
+        this.all = data;
+      });
+    },
+    clear() {
+      document.location.reload();
     }
   },
   computed: {},
@@ -267,6 +345,7 @@ export default {
     await this.getAllRecord();
 
     this.currentScore = this.all[0].records[0].score;
+    this.highestScore = this.all[0].highestScore;
   },
   watch: {
     "newRecord.increment": function() {

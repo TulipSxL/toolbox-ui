@@ -8,7 +8,7 @@
       <div style="height: 50px"></div>
       <b-navbar type="dark" variant="info" fixed="bottom">
         <b-navbar-nav small>
-          <b-navbar-item>津ICP备19009474号 Copyright © 2019 SxL. All Rights Reserved.</b-navbar-item>
+          <b-navbar-item><a href='http://beian.miit.gov.cn'>津ICP备19009474号</a> Copyright © 2019 SxL. All Rights Reserved.</b-navbar-item>
         </b-navbar-nav>
       </b-navbar>
     </div>

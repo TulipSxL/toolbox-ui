@@ -4,7 +4,8 @@ import Hosts from "./components/Hosts.vue";
 import Program from "./components/Program.vue"
 import Shopping from "./components/Shopping.vue"
 import Amount from "./components/Amount.vue"
-import Record from "./components/Record.vue"
+import Record from "./components/record/Record.vue"
+import RecordRank from "./components/record/RecordRank.vue"
 
 Vue.use(Router);
 
@@ -38,6 +39,11 @@ export default new Router({
       path: "/record",
       name: "record",
       component: Record
+    },
+    {
+      path: "/record/rank",
+      name: "recordRank",
+      component: RecordRank
     }
   ]
 });
