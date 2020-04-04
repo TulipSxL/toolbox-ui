@@ -6,6 +6,7 @@ import Shopping from "./components/Shopping.vue"
 import Amount from "./components/Amount.vue"
 import Record from "./components/record/Record.vue"
 import RecordRank from "./components/record/RecordRank.vue"
+import HsHero from "./components/HsHero.vue"
 
 Vue.use(Router);
 
@@ -13,7 +14,7 @@ export default new Router({
   routes: [
     {
       path: "/",
-      redirect: "/record"
+      redirect: "/hs/record"
     },
     {
       path: "/hosts",
@@ -36,9 +37,14 @@ export default new Router({
       component: Amount
     },
     {
-      path: "/record",
+      path: "/hs/record",
       name: "record",
       component: Record
+    },
+    {
+      path: "/hs/hero",
+      name: "hero",
+      component: HsHero
     },
     {
       path: "/record/rank",

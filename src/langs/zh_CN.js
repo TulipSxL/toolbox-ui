@@ -6,13 +6,15 @@ export const message = {
       host: "Host",
       shopping: "购物单",
       consumption: "消费",
-      record: "战绩"
+      hearthStone: "炉石"
     },
     dropdown: {
       hosts: "Host",
       program: "方案",
       amount: "额度",
-      consumeLog: "消费记录"
+      consumeLog: "消费记录",
+      record: "战绩",
+      hero: "英雄"
     }
   },
   host: {

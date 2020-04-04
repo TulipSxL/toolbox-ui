@@ -26,9 +26,9 @@ module.exports = merge(webpackBase, {
   devServer: {
     proxy: {
       // '/': 'https://mytoolbox.com.cn'
-      "/": "http://localhost"
+      "/": "http://localhost:8080"
     },
-    port: 8080
+    port: 8081
   },
   plugins: [
     new HtmlWebpackPlugin({

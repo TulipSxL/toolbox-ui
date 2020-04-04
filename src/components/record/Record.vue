@@ -307,8 +307,10 @@ export default {
       });
     },
     getAllHero() {
-      axios.get(BASE_URL_HERO).then(({ data }) => {
-        this.heroes = data;
+      axios.get(BASE_URL_HERO + "?online=true").then(({ data }) => {
+        data.forEach(item => {
+          this.heroes.push(item.name);
+        });
       });
     },
     async getAllRecord() {
@@ -355,6 +357,14 @@ export default {
       let now = new Date();
       this.newRecord.time =
         now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+    },
+    "selected.name": function() {
+        this.selected.originScore = this.currentScore - this.selected.increment;
+    },
+    "selected.increment": function(value, oldValue) {
+      if (oldValue != 0 ) {
+        this.selected.score = Number(this.selected.originScore) + Number(this.selected.increment);
+      }
     }
   }
 };

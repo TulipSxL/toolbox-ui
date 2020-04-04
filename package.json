@@ -1,6 +1,6 @@
 {
   "name": "@tulip_sxl/toolbox-ui",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "A console web UI for toolbox",
   "main": "index.js",
   "scripts": {

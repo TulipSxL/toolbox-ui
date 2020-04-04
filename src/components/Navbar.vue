@@ -24,7 +24,7 @@
             <b-dropdown-item
               v-for="item in title.list"
               :key="item.id"
-              :href="'#/' + item"
+              :href="'#/' + title.prefix +  item"
               @click="activeFather(item)"
             >{{ $t('message.navbar.dropdown.' + item) }}</b-dropdown-item>
           </b-nav-item-dropdown>
@@ -45,15 +45,22 @@ export default {
   data() {
     return {
       activeName: this.$route.path,
-      navBarItem: ["shopping", "record"],
+      navBarItem: ["shopping"],
       navBarItemDropdown: [
         {
           name: "host",
-          list: ["hosts", "program"]
+          list: ["hosts", "program"],
+          prefix: ""
         },
         {
           name: "consumption",
-          list: ["amount", "consumeLog"]
+          list: ["amount", "consumeLog"],
+          prefix: ""
+        },
+        {
+          name: "hearthStone",
+          list: ["record", "hero"],
+          prefix: "hs/"
         }
       ]
     };
@@ -65,7 +72,7 @@ export default {
     activeFather(name) {
       this.navBarItemDropdown.forEach(title => {
         title.list.forEach(item => {
-          if (item == name) {
+          if (item == name || title.prefix + item == name) {
             this.active(title.name);
             return;
           }
