@@ -1,12 +1,18 @@
+/*
+ * @Author: SxL
+ * @Date: 2020-04-03 21:16:47
+ * @LastEditTime: 2020-04-23 14:42:53
+ * @Description: vue router
+ * @FilePath: /toolbox-ui/src/router.js
+ */
 import Vue from "vue";
 import Router from "vue-router";
-import Hosts from "./components/Hosts.vue";
-import Program from "./components/Program.vue"
-import Shopping from "./components/Shopping.vue"
-import Amount from "./components/Amount.vue"
-import Record from "./components/record/Record.vue"
-import RecordRank from "./components/record/RecordRank.vue"
-import HsHero from "./components/HsHero.vue"
+import Record from "./components/hs/Record.vue"
+import RecordRank from "./components/hs/RecordRank.vue"
+import HsHero from "./components/hs/HsHero.vue"
+import UrlEncodeDecode from "./components/tool/Url.vue"
+import GuidGenerator from "./components/tool/Guid.vue"
+import Penguin from "./components/video_website/Penguin.vue"
 
 Vue.use(Router);
 
@@ -15,26 +21,6 @@ export default new Router({
     {
       path: "/",
       redirect: "/hs/record"
-    },
-    {
-      path: "/hosts",
-      name: "hosts",
-      component: Hosts
-    },
-    {
-      path: "/program",
-      name: "program",
-      component: Program
-    },
-    {
-      path: "/shopping",
-      name: "shopping",
-      component: Shopping
-    },
-    {
-      path: "/amount",
-      name: "amount",
-      component: Amount
     },
     {
       path: "/hs/record",
@@ -50,6 +36,21 @@ export default new Router({
       path: "/record/rank",
       name: "recordRank",
       component: RecordRank
+    },
+    {
+      path: "/tool/url",
+      name: "urlEncodeDecode",
+      component: UrlEncodeDecode
+    },
+    {
+      path: "/tool/guid",
+      name: "guidGenerator",
+      component: GuidGenerator
+    },
+    {
+      path: "/va",
+      name: "penguin",
+      component: Penguin
     }
   ]
 });

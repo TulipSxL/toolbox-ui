@@ -1,6 +1,6 @@
 {
   "name": "@tulip_sxl/toolbox-ui",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "description": "A console web UI for toolbox",
   "main": "index.js",
   "scripts": {
@@ -52,7 +52,9 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^6.2.2",
+    "minimist": ">=0.2.1",
     "uglifyjs-webpack-plugin": "^2.2.0",
+    "vue-clipboard2": "^0.3.1",
     "vue-router": "^3.1.6"
   }
 }

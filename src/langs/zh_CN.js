@@ -1,20 +1,26 @@
+/*
+ * @Author: SxL
+ * @Date: 2020-04-03 21:16:47
+ * @LastEditTime: 2020-04-08 16:13:53
+ * @Description: i18n zh_CN
+ * @FilePath: /toolbox-ui/src/langs/zh_CN.js
+ * @Version: 
+ */
 export const message = {
   title: "工具箱",
   navbar: {
     item: {
       language: "语言",
-      host: "Host",
-      shopping: "购物单",
-      consumption: "消费",
-      hearthStone: "炉石"
+      hearthStone: "炉石",
+      tool: "工具",
+      videoAnalyse: "视频调试"
     },
     dropdown: {
-      hosts: "Host",
-      program: "方案",
-      amount: "额度",
-      consumeLog: "消费记录",
       record: "战绩",
-      hero: "英雄"
+      hero: "英雄",
+      url: "URL",
+      guid: "GUID",
+      penguin: "企鹅"
     }
   },
   host: {

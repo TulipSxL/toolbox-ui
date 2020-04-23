@@ -1,3 +1,10 @@
+<!--
+ * @Author: SxL
+ * @Date: 2020-04-03 21:16:47
+ * @LastEditTime: 2020-04-23 14:41:29
+ * @Description: index page
+ * @FilePath: /toolbox-ui/src/components/Navbar.vue
+ -->
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" variant="info">
@@ -45,22 +52,17 @@ export default {
   data() {
     return {
       activeName: this.$route.path,
-      navBarItem: ["shopping"],
+      navBarItem: ["videoAnalyse"],
       navBarItemDropdown: [
-        {
-          name: "host",
-          list: ["hosts", "program"],
-          prefix: ""
-        },
-        {
-          name: "consumption",
-          list: ["amount", "consumeLog"],
-          prefix: ""
-        },
         {
           name: "hearthStone",
           list: ["record", "hero"],
           prefix: "hs/"
+        },
+        {
+          name: "tool",
+          list: ["url", "guid"],
+          prefix: "tool/"
         }
       ]
     };
